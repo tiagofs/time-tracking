@@ -4,7 +4,7 @@ import EditableTimer from './EditableTimer';
 export default class EditableTimerList extends Component {
     render() {
 
-        const { timers } = this.props;
+        const {timers, onFormSubmit, onDeleteClick, onStopClick, onStartClick } = this.props;
 
         const timersList = timers.map(({id,title,project,elapsed,runningSince}) => (
             <EditableTimer
@@ -14,8 +14,10 @@ export default class EditableTimerList extends Component {
                 project={project}
                 elapsed={elapsed}
                 runningSince={runningSince}
-                onFormSubmit={this.props.onFormSubmit}
-                onTimerDelete={this.props.onTimerDelete}
+                onFormSubmit={onFormSubmit}
+                onDeleteClick={onDeleteClick}
+                onStartClick={onStartClick}
+                onStopClick={onStopClick}
             />
         ));
 

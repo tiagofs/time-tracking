@@ -1,17 +1,39 @@
 import React, { Component } from 'react'
 import { helpers } from '../helpers';
+import TimerActionButton from './TimerActionButton';
 
 
 export default class Timer extends Component {
 
-    
+
     handleDeleteClick = () => {
-        this.props.onDeleteClick(this.props.id);
+        // this.props.onDeleteClick(this.props.id);
+        // or 
+        const { id, onDeleteClick } = this.props;
+        onDeleteClick(id);
     }
-    
+
+    handleStartClick = () => {
+        const {id, onStartClick} = this.props;
+        onStartClick(id);
+    }
+    handleStopClick = () => {
+        const {id, onStopClick} = this.props;
+        onStopClick(id);
+    }
+
+    componentDidMount() {
+       this.forceUpdateInterval = setInterval( () => this.forceUpdate(), 500 );
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.forceUpdateInterval);
+    }
+
     render() {
-        const { title, project, elapsed, runningSince } = this.props;
-        const elapsedString = helpers.renderElapsedString(elapsed);
+        const { id, title, project, elapsed, runningSince, onEditClick } = this.props;
+
+        const elapsedString = helpers.renderElapsedString(elapsed, runningSince);
         return (
             <div className='ui centered card'>
                 <div className='content'>
@@ -29,7 +51,7 @@ export default class Timer extends Component {
                     <div className='extra content'>
                         <span
                             className='right floated edit icon'
-                            onClick={this.props.onEditClick}
+                            onClick={onEditClick}
                         >
                             <i className='edit icon' />
                         </span>
@@ -41,9 +63,14 @@ export default class Timer extends Component {
                         </span>
                     </div>
                 </div>
-                <div className='ui bottom attached blue basic button'>
+                {/* <div className='ui bottom attached blue basic button'>
                     Start
-        </div>
+                </div> */}
+                <TimerActionButton 
+                    timerIsRunning = {!!runningSince}
+                    onStartClick = {this.handleStartClick}
+                    onStopClick = {this.handleStopClick}
+                />
             </div>
         )
     }
